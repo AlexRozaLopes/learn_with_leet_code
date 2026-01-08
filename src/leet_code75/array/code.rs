@@ -1,0 +1,47 @@
+pub fn reverse_vowels(s: String) -> String {
+    let vowels = vec!['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
+
+    let mut find_vowels = s
+        .chars()
+        .filter(|c| vowels.contains(c))
+        .collect::<Vec<char>>();
+
+    s.chars()
+        .map(|c| {
+            if vowels.contains(&c) {
+                find_vowels.pop().unwrap()
+            } else {
+                c
+            }
+        })
+        .collect()
+}
+
+pub fn reverse_vowels_best(mut s: String) -> String {
+    // From the description, `s` is guaranteed to be ASCII, so this is fine
+    let bytes = unsafe { s.as_bytes_mut() };
+
+    let mut iter = bytes.iter_mut();
+    while let (Some(left), Some(right)) = (
+        iter.find(|c| is_vowel(c)),
+        iter.rfind(|c| is_vowel(c))
+    ) {
+        std::mem::swap(left, right);
+    }
+
+    s
+}
+
+fn is_vowel(c: &u8) -> bool {
+    matches!(c.to_ascii_lowercase(), b'a' | b'e' | b'i' | b'o' | b'u')
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::leet_code75::array::code::reverse_vowels;
+
+    #[test]
+    fn test_reverse_vowels() {
+        assert_eq!(reverse_vowels("IceCreAm".to_string()), "AceCreIm");
+    }
+}
