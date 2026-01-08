@@ -22,10 +22,8 @@ pub fn reverse_vowels_best(mut s: String) -> String {
     let bytes = unsafe { s.as_bytes_mut() };
 
     let mut iter = bytes.iter_mut();
-    while let (Some(left), Some(right)) = (
-        iter.find(|c| is_vowel(c)),
-        iter.rfind(|c| is_vowel(c))
-    ) {
+    while let (Some(left), Some(right)) = (iter.find(|c| is_vowel(c)), iter.rfind(|c| is_vowel(c)))
+    {
         std::mem::swap(left, right);
     }
 
@@ -36,12 +34,25 @@ fn is_vowel(c: &u8) -> bool {
     matches!(c.to_ascii_lowercase(), b'a' | b'e' | b'i' | b'o' | b'u')
 }
 
+pub fn reverse_words(s: String) -> String {
+    s.split_whitespace().rev().collect::<Vec<&str>>().join(" ")
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::leet_code75::array::code::reverse_vowels;
+    use crate::leet_code75::array::code::{reverse_vowels, reverse_vowels_best, reverse_words};
 
     #[test]
     fn test_reverse_vowels() {
         assert_eq!(reverse_vowels("IceCreAm".to_string()), "AceCreIm");
+    }
+    #[test]
+    fn test_reverse_vowels_best() {
+        assert_eq!(reverse_vowels_best("IceCreAm".to_string()), "AceCreIm");
+    }
+
+    #[test]
+    fn test_reverse_words() {
+        assert_eq!(reverse_words("the sky is blue".to_string()), "blue is sky the");
     }
 }
