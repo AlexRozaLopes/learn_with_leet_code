@@ -20,7 +20,7 @@ pub fn is_subsequence(s: String, t: String) -> bool {
 
     for i in 0..ct.len() {
         match option {
-            None => { },
+            None => {}
             Some(c) => {
                 if c.eq(&ct[i]) {
                     option = iter.next()
@@ -32,12 +32,35 @@ pub fn is_subsequence(s: String, t: String) -> bool {
     option.is_none()
 }
 
+pub fn pair_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+    let mut r = nums.len() - 1;
+    let mut l = 0;
+
+    loop {
+        if nums[l] + nums[r] > target {
+            r -= 1;
+        } else if nums[l] + nums[r] < target {
+            l += 1;
+        }
+
+        return vec![l as i32, r as i32];
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::leet_code75::two_points::code::is_subsequence;
+    use crate::leet_code75::two_points::code::{is_subsequence, pair_sum};
 
     #[test]
     fn test_is_subsequence() {
-        assert_eq!(is_subsequence(String::from("abc"), String::from("ahbgdc")), true);
+        assert_eq!(
+            is_subsequence(String::from("abc"), String::from("ahbgdc")),
+            true
+        );
+    }
+
+    #[test]
+    fn test_pair_sum() {
+        assert_eq!(pair_sum(vec![1, 2, 3].to_vec(), 4), vec![0, 2]);
     }
 }
