@@ -34,13 +34,59 @@ fn is_vowel(c: &u8) -> bool {
     matches!(c.to_ascii_lowercase(), b'a' | b'e' | b'i' | b'o' | b'u')
 }
 
+pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
+    let mut ret = vec![1; nums.len()];
+    let mut l = 0;
+    let mut r = nums.len() - 1;
+
+    let mut lv = 1;
+    let mut rv = 1;
+
+    loop {
+        ret[l] = ret[l] * lv;
+        ret[r] = ret[r] * rv;
+
+        println!("{:?}", ret);
+
+        rv = rv * nums[r];
+        lv = lv * nums[l];
+
+        println!("rv: {}, lv: {}", rv, lv);
+
+        if r == 0 {
+            break;
+        }
+        l += 1;
+        r -= 1;
+    }
+
+    ret
+}
+
+pub fn increasing_triplet(nums: Vec<i32>) -> bool
+{
+    let mut first  = i32::MAX;
+    let mut second = i32::MAX;
+
+    for &n in nums.iter()
+    {
+        if n <= first  { first = n; }
+        else if n <= second { second = n; }
+        else { return true; }
+    }
+
+    return false;
+}
+
 pub fn reverse_words(s: String) -> String {
     s.split_whitespace().rev().collect::<Vec<&str>>().join(" ")
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::leet_code75::array::code::{reverse_vowels, reverse_vowels_best, reverse_words};
+    use crate::leet_code75::array::code::{
+        product_except_self, reverse_vowels, reverse_vowels_best, reverse_words,
+    };
 
     #[test]
     fn test_reverse_vowels() {
@@ -53,6 +99,14 @@ mod tests {
 
     #[test]
     fn test_reverse_words() {
-        assert_eq!(reverse_words("the sky is blue".to_string()), "blue is sky the");
+        assert_eq!(
+            reverse_words("the sky is blue".to_string()),
+            "blue is sky the"
+        );
+    }
+
+    #[test]
+    fn test_product_except_self() {
+        assert_eq!(product_except_self(Vec::from([1, 2, 3, 4])), [24, 12, 8, 6]);
     }
 }
