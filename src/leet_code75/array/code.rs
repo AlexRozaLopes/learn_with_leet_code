@@ -82,6 +82,30 @@ pub fn reverse_words(s: String) -> String {
     s.split_whitespace().rev().collect::<Vec<&str>>().join(" ")
 }
 
+pub fn compress(chars: &mut Vec<char>) -> i32 {
+    let n = chars.len();
+
+    let mut i = 0; //c
+    let mut j = 0; //
+    let mut k = 0; //nl
+
+    while i < n {
+        while i < n && chars[i] == chars[j] { i += 1; }
+
+        chars[k] = chars[i - 1];
+        k += 1;
+
+        if i > j + 1 {
+            for c in (i - j).to_string().chars() {
+                chars[k] = c;
+                k += 1;
+            }
+        }
+        j = i;
+    }
+    k as i32
+}
+
 #[cfg(test)]
 mod tests {
     use crate::leet_code75::array::code::{
