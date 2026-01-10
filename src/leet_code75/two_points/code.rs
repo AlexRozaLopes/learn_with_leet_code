@@ -1,3 +1,5 @@
+use std::cmp::max;
+
 pub fn move_zeroes(nums: &mut Vec<i32>) {
     let mut z = Vec::new();
     nums.retain(|x| {
@@ -57,24 +59,51 @@ pub fn is_palindrome(word: String) -> bool {
             if vec[l] != vec[r] {
                 return false;
             }
-            l +=1;
-            r -=1;
-        }else {
+            l += 1;
+            r -= 1;
+        } else {
             if !vec[l].is_alphanumeric() {
-                l +=1;
+                l += 1;
             }
             if !vec[r].is_alphanumeric() {
-                r -=1;
+                r -= 1;
             }
         }
-
     }
     return true;
 }
 
+pub fn max_area(height: Vec<i32>) -> i32 {
+    let mut l = 0;
+    let mut r = height.len() - 1;
+
+    let mut max_area = 0;
+    let mut area = 0;
+
+    loop {
+        area = std::cmp::min(height[l], height[r]) * (r as i32 - l as i32);
+
+        max_area = max(max_area, area);
+
+        if height[l] < height[r] {
+            l += 1;
+        } else if height[r] < height[l] {
+            r -= 1;
+        } else {
+            l += 1;
+            r -= 1;
+        }
+
+        if l >= r {
+            break;
+        }
+    }
+    max_area
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::leet_code75::two_points::code::{is_subsequence, pair_sum,is_palindrome};
+    use crate::leet_code75::two_points::code::{is_palindrome, is_subsequence, pair_sum};
 
     #[test]
     fn test_is_subsequence() {
