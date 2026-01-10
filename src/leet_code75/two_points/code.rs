@@ -47,9 +47,34 @@ pub fn pair_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
     }
 }
 
+pub fn is_palindrome(word: String) -> bool {
+    let vec = word.chars().collect::<Vec<char>>();
+    let mut l = 0;
+    let mut r = vec.len() - 1;
+
+    while l < r {
+        if vec[l].is_alphanumeric() == vec[r].is_alphanumeric() {
+            if vec[l] != vec[r] {
+                return false;
+            }
+            l +=1;
+            r -=1;
+        }else {
+            if !vec[l].is_alphanumeric() {
+                l +=1;
+            }
+            if !vec[r].is_alphanumeric() {
+                r -=1;
+            }
+        }
+
+    }
+    return true;
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::leet_code75::two_points::code::{is_subsequence, pair_sum};
+    use crate::leet_code75::two_points::code::{is_subsequence, pair_sum,is_palindrome};
 
     #[test]
     fn test_is_subsequence() {
@@ -62,5 +87,10 @@ mod tests {
     #[test]
     fn test_pair_sum() {
         assert_eq!(pair_sum(vec![1, 2, 3].to_vec(), 4), vec![0, 2]);
+    }
+
+    #[test]
+    fn test_is_palindrome() {
+        assert_eq!(is_palindrome("arara!".to_string()), true);
     }
 }
