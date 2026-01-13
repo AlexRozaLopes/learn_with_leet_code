@@ -17,22 +17,51 @@ pub fn max_vowels(s: String, k: i32) -> i32 {
     let chars = s.chars().collect::<Vec<char>>();
     let mut max_vowels = chars[..k as usize].iter().filter(|x| vowels.contains(x)).count() as i32;
 
-    let mut count = 0;
+    let mut current_vowels = max_vowels;
+
     for i in k as usize..chars.len() {
         println!("max_vowels: {max_vowels}");
-        println!("chars l: {} , chars r: {}", chars[i-k as usize],chars[i]);
+        println!("current_vowels: {current_vowels}");
         if vowels.contains(&chars[i]) {
-            count += 1;
+            current_vowels +=1;
         }
 
         if vowels.contains(&chars[i - k as usize]) {
-            count -= 1;
+            current_vowels -=1;
         }
-        max_vowels = max_vowels.max(max_vowels + count);
+        max_vowels = max_vowels.max(current_vowels);
     }
     max_vowels
 }
 
+pub fn max_vowels_function(s: String, k: i32) -> i32 {
+    let vowels: [u8; 5] = [b'a', b'e', b'i', b'o', b'u'];
+    let k: usize = k as usize;
+    let s_bytes: &[u8] = s.as_bytes();
+    let mut current_vowels: usize = s_bytes
+        .iter()
+        .take(k)
+        .filter(|&byte| vowels.contains(byte))
+        .count();
+
+    let mut n_max_vowels: usize = current_vowels;
+
+    s_bytes
+        .iter()
+        .skip(k)
+        .enumerate()
+        .for_each(|(i, e): (usize, &u8)| {
+            if vowels.contains(e) {
+                current_vowels += 1;
+            }
+            if vowels.contains(&&s_bytes[i]) {
+                current_vowels -= 1;
+            }
+            n_max_vowels = n_max_vowels.max(current_vowels);
+        });
+
+    n_max_vowels as i32
+}
 
 #[cfg(test)]
 mod tests {
@@ -45,6 +74,7 @@ mod tests {
 
     #[test]
     fn test_max_vowels() {
-        assert_eq!(max_vowels("leetcode".to_string(), 3), 2);
+        assert_eq!(max_vowels("abciiidef".to_string(), 3), 3);
+        assert_eq!(max_vowels("leetcode".to_string(), 2), 2);
     }
 }
