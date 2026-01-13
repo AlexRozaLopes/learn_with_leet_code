@@ -15,7 +15,10 @@ pub fn find_max_average(nums: Vec<i32>, k: i32) -> f64 {
 pub fn max_vowels(s: String, k: i32) -> i32 {
     let vowels = vec!['a', 'e', 'i', 'o', 'u'];
     let chars = s.chars().collect::<Vec<char>>();
-    let mut max_vowels = chars[..k as usize].iter().filter(|x| vowels.contains(x)).count() as i32;
+    let mut max_vowels = chars[..k as usize]
+        .iter()
+        .filter(|x| vowels.contains(x))
+        .count() as i32;
 
     let mut current_vowels = max_vowels;
 
@@ -23,11 +26,11 @@ pub fn max_vowels(s: String, k: i32) -> i32 {
         println!("max_vowels: {max_vowels}");
         println!("current_vowels: {current_vowels}");
         if vowels.contains(&chars[i]) {
-            current_vowels +=1;
+            current_vowels += 1;
         }
 
         if vowels.contains(&chars[i - k as usize]) {
-            current_vowels -=1;
+            current_vowels -= 1;
         }
         max_vowels = max_vowels.max(current_vowels);
     }
@@ -63,13 +66,35 @@ pub fn max_vowels_function(s: String, k: i32) -> i32 {
     n_max_vowels as i32
 }
 
+pub fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
+    let mut left = 0;
+    let mut zeros = 0;
+    let mut max_len = 0;
+
+    for right in 0..nums.len() {
+        if nums[right] == 0 {
+            zeros += 1;
+        }
+
+        while zeros > k {
+            if nums[left] == 0 {
+                zeros -= 1;
+            }
+            left += 1;
+        }
+
+        max_len = max_len.max((right - left + 1) as i32);
+    }
+
+    max_len
+}
 #[cfg(test)]
 mod tests {
     use crate::leet_code75::sliding_window::code::{find_max_average, max_vowels};
 
     #[test]
     fn test_find_max_average() {
-        assert_eq!(find_max_average(vec![1,12,-5,-6,50,3], 4), 12.75000);
+        assert_eq!(find_max_average(vec![1, 12, -5, -6, 50, 3], 4), 12.75000);
     }
 
     #[test]
