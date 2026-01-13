@@ -101,9 +101,36 @@ pub fn max_area(height: Vec<i32>) -> i32 {
     max_area
 }
 
+pub fn is_happy_number(number: i32) -> bool {
+    let (mut slow, mut fast) = (number, number);
+
+    loop {
+        slow = get_next_sum(slow);
+        fast = get_next_sum(get_next_sum(fast));
+
+        println!("slow = {}, fast = {}", slow, fast);
+
+        if fast == 1 {
+            return true;
+        }
+        if slow == fast {
+            return false;
+        }
+    }
+}
+
+fn get_next_sum(number: i32) -> i32 {
+    let mut sum = 0;
+    number.to_string().chars().for_each(|c| {
+        let sq = c.to_string().parse::<i32>().unwrap() * c.to_string().parse::<i32>().unwrap();
+        sum += sq;
+    });
+    sum
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::leet_code75::two_points::code::{is_palindrome, is_subsequence, pair_sum};
+    use crate::leet_code75::two_points::code::*;
 
     #[test]
     fn test_is_subsequence() {
@@ -121,5 +148,10 @@ mod tests {
     #[test]
     fn test_is_palindrome() {
         assert_eq!(is_palindrome("arara!".to_string()), true);
+    }
+
+    #[test]
+    fn test_happy_number() {
+        assert_eq!(is_happy_number(23), true);
     }
 }
