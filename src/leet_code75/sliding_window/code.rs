@@ -88,6 +88,25 @@ pub fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
 
     max_len
 }
+
+pub fn longest_subarray(nums: Vec<i32>) -> i32 {
+    let n = nums.len();
+    let (mut c0, mut t0, mut c, mut ans) = (0, 0, 0, 0);
+
+    for r in 0..n {
+        if nums[r] == 1 {
+            c += 1;
+            ans = ans.max(c);
+        } else if nums[r] == 0 && c0 == 0 {
+            c0 += 1;
+            t0 = r as i32;
+        } else if nums[r] == 0 && c0 == 1 {
+            c = (r as i32 - t0 - 1) as i32;
+            t0 = r as i32;
+        }
+    }
+    if c0 < 1 { ans - 1 } else { ans }
+}
 #[cfg(test)]
 mod tests {
     use crate::leet_code75::sliding_window::code::{find_max_average, max_vowels};
